@@ -44,8 +44,9 @@ def get_number_page():
         if page:
             nbre_page = page.text.replace(" ", "")
             max_page = nbre_page[-3]
-            for j in range(int(max_page)-1):
-                url2 = 'http://books.toscrape.com/catalogue/category/books/' + i.replace(" ", "").lower().strip('\n') + "_" + str(ind) + "/page-" + str(j + 2) + ".html"
+            for j in range(int(max_page) - 1):
+                url2 = 'http://books.toscrape.com/catalogue/category/books/' + i.replace(" ", "").lower().strip(
+                    '\n') + "_" + str(ind) + "/page-" + str(j + 2) + ".html"
                 links_other_page.append(url2)
 
 
@@ -55,6 +56,7 @@ def get_all_book_by_categorie():
 
     for i in list_cat:
         links_all_page.clear()
+        book_info.clear()
         url1 = links_cat[num]
         links_all_page.append(url1)
 
@@ -68,12 +70,12 @@ def get_all_book_by_categorie():
         for link in links_all_page:
             res = requests.get(link)
             sp = BeautifulSoup(res.text, features="html.parser")
-            page = sp.find(class_='current')
-            result = sp.find(class_='form-horizontal')
+            #page = sp.find(class_='current')
+            #result = sp.find(class_='form-horizontal')
 
             books = sp.findAll(class_="image_container")
 
-            #Création url du livre
+            # Création url du livre
             for u in books:
                 a = u.find('a')
                 link = a['href']
@@ -84,24 +86,19 @@ def get_all_book_by_categorie():
 
                 get_book_info(link_final)
 
-
-        extract_to_csv(book_info,i+".csv")
-
+        extract_to_csv(book_info, i + ".csv")
 
 
 def extract_to_csv(liste, output_file, delimiter="\t"):
-    header = ["universal_ product_code (upc)","title","price_including_tax", "price_excluding_tax",
-              "number_available","product_description","category","review_rating", "image_url"]
-    with open(output_file, "w") as output_file:
+    header = ["universal_ product_code (upc)", "title", "price_including_tax", "price_excluding_tax",
+              "number_available", "product_description", "category", "review_rating", "image_url"]
+    with open(output_file, "w",encoding='utf-8') as output_file:
+        # for i in header:
+        # output_file.write(i + '\t')
 
-        for i in header:
-
-            output_file.write(i + '\t')
-
-        output_file.write('\n')
         for i in liste:
+            output_file.write(i + '\n')
 
-            output_file.write(str(i) + '\t')
 
 def get_book_info(url_book):
     res = requests.get(url_book)
@@ -115,5 +112,3 @@ def get_book_info(url_book):
 get_categories()
 get_number_page()
 get_all_book_by_categorie()
-
-
