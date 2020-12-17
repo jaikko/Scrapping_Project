@@ -5,12 +5,35 @@ from bs4 import BeautifulSoup
 url = 'http://books.toscrape.com/'
 response = requests.get(url)
 soup = BeautifulSoup(response.text, features="html.parser")
+
+# Liste
 links_cat = []
 links_books = []
 list_cat = []
 book_info = []
 links_other_page = []
 links_all_page = []
+list_th = []
+
+
+# classe Book
+class Book:
+    def __init__(self, product_page_url, upc, title, price_incl, price_excl, number_available, product_description,
+                 category, review_rating, image_url):
+        self.title = title
+        self.price_incl = price_incl
+        self.price_excl = price_excl
+        self.upc = upc
+        self.product_page_url = product_page_url
+        self.number_available = number_available
+        self.product_description = product_description
+        self.category = category
+        self.review_rating = review_rating
+        self.image_url = image_url
+
+    def val(self):
+        return [self.product_page_url, self.upc, self.title, str(self.price_incl), str(self.price_excl),
+                str(self.number_available), self.product_description, self.category, self.review_rating, self.image_url]
 
 
 # Recuperer toutes les catégories
@@ -70,8 +93,8 @@ def get_all_book_by_categorie():
         for link in links_all_page:
             res = requests.get(link)
             sp = BeautifulSoup(res.text, features="html.parser")
-            #page = sp.find(class_='current')
-            #result = sp.find(class_='form-horizontal')
+            # page = sp.find(class_='current')
+            # result = sp.find(class_='form-horizontal')
 
             books = sp.findAll(class_="image_container")
 
@@ -84,29 +107,100 @@ def get_all_book_by_categorie():
                 links_books.append('http://books.toscrape.com/catalogue/' + link_str[3] + "/" + link_str[4])
                 link_final = 'http://books.toscrape.com/catalogue/' + link_str[3] + "/" + link_str[4]
 
-                get_book_info(link_final)
+                get_book_info(link_final, i)
 
-        extract_to_csv(book_info, i + ".csv")
+        extract_to_csv(i + ".csv")
 
 
-def extract_to_csv(liste, output_file, delimiter="\t"):
+def extract_to_csv(output_file, delimiter="\t"):
     header = ["universal_ product_code (upc)", "title", "price_including_tax", "price_excluding_tax",
               "number_available", "product_description", "category", "review_rating", "image_url"]
-    with open(output_file, "w",encoding='utf-8') as output_file:
+    with open(output_file, "w", encoding='utf-8') as output_file:
         # for i in header:
         # output_file.write(i + '\t')
+        cc = 0
+        header = ["product_page_url", "universal_product_code(upc)", "title", "price_including_tax",
+                  "price_excluding_tax","number_available", "product_description", "category", "review_rating",
+                  "image_url"]
+        for head in header:
+            output_file.write(head+"*" + '\t')
 
-        for i in liste:
-            output_file.write(i + '\n')
+        output_file.write('\n')
+        for li in book_info:
+            book = li.val()
+            for info in book:
+                output_file.write(info + "*" + '\t')
+                cc += 1
+                if cc == 10:
+                    output_file.write('\n')
+                    cc = 0
 
 
-def get_book_info(url_book):
-    res = requests.get(url_book)
-    sp = BeautifulSoup(res.text, features="html.parser")
+def get_book_info(url_book, cat):
+    if response:
+        res = requests.get(url_book)
+        sp = BeautifulSoup(res.text, features="html.parser")
 
-    # Ajouter titre à la liste
-    title = sp.find('h1')
-    book_info.append(title.text)
+        table = read_table(sp)
+        # dict_book["universal_ product_code (upc)"] = table[0]
+        # dict_book["price_including_tax"] = table[1]
+        # dict_book["price_excluding_tax"] = table[2]
+        upc = table[0]
+        p_inc = table[1]
+        p_excl = table[2]
+
+        # book_info.append(upc)
+
+        # Ajouter titre à la liste
+        title = sp.find('h1')
+        title = title.text
+        # book_info.append(title.text)
+        # dict_book["title"] = title.text
+
+        # Ajouter note à la liste
+        note = sp.find_all('p')
+        note_str = note[2].get_attribute_list('class')
+        note_end = note_str[1]
+
+        if note_end == "One":
+            review = "1/5"
+        elif note_end == "Two":
+            review = "2/5"
+        elif note_end == "Three":
+            review = "3/5"
+        elif note_end == "Four":
+            review = "4/5"
+        elif note_end == "Five":
+            review = "5/5"
+
+        # dict_book['review_rating'] = review
+        # list_dicts.append(dict_book)
+
+        # Ajouter Image URL
+        images = soup.findAll('img')
+        for image in images:
+            img_url = image['src']
+
+        book = Book(url_book, upc, title, p_inc, p_excl, "3", "ets", cat, review, img_url)
+        book_info.append(book)
+
+
+def read_table(sp):
+    list_th.clear()
+    all_th = sp.findAll('td')
+
+    for i in all_th:
+        th_data = i.text.rstrip('\n')
+        list_th.append(th_data)
+
+    del list_th[1]
+    del list_th[3:6]
+
+    # retourner liste avec UPC et les deux prix
+    return list_th
+
+
+
 
 
 get_categories()
