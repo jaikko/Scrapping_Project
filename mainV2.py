@@ -4,7 +4,8 @@ from bs4 import BeautifulSoup
 # Debut
 url = 'http://books.toscrape.com/'
 response = requests.get(url)
-soup = BeautifulSoup(response.text, features="html.parser")
+if response:
+    soup = BeautifulSoup(response.text, features="html.parser")
 
 # Liste
 links_cat = []
@@ -13,7 +14,7 @@ list_cat = []
 book_info = []
 links_other_page = []
 links_all_page = []
-list_th = []
+
 
 
 # classe Book
@@ -113,8 +114,7 @@ def get_all_book_by_categorie():
 
 
 def extract_to_csv(output_file, delimiter="\t"):
-    header = ["universal_ product_code (upc)", "title", "price_including_tax", "price_excluding_tax",
-              "number_available", "product_description", "category", "review_rating", "image_url"]
+
     with open(output_file, "w", encoding='utf-8') as output_file:
         # for i in header:
         # output_file.write(i + '\t')
@@ -126,6 +126,7 @@ def extract_to_csv(output_file, delimiter="\t"):
             output_file.write(head+"*" + '\t')
 
         output_file.write('\n')
+
         for li in book_info:
             book = li.val()
             for info in book:
@@ -142,20 +143,25 @@ def get_book_info(url_book, cat):
         sp = BeautifulSoup(res.text, features="html.parser")
 
         table = read_table(sp)
-        # dict_book["universal_ product_code (upc)"] = table[0]
-        # dict_book["price_including_tax"] = table[1]
-        # dict_book["price_excluding_tax"] = table[2]
         upc = table[0]
         p_inc = table[1]
+        p_inc = p_inc[1:].replace("Â", "")
         p_excl = table[2]
+        p_excl = p_excl[1:]
+        stock = table[3]
 
-        # book_info.append(upc)
+        #récuper le nombre
+        stock = stock.split(" ")
+        stock = stock[2].replace("(", "")
+
+        # Ajouter description à la lsite
+        desc = sp.find_all('p')
+        desc = desc[3].text
 
         # Ajouter titre à la liste
         title = sp.find('h1')
         title = title.text
-        # book_info.append(title.text)
-        # dict_book["title"] = title.text
+
 
         # Ajouter note à la liste
         note = sp.find_all('p')
@@ -173,19 +179,22 @@ def get_book_info(url_book, cat):
         elif note_end == "Five":
             review = "5/5"
 
-        # dict_book['review_rating'] = review
-        # list_dicts.append(dict_book)
-
         # Ajouter Image URL
         images = soup.findAll('img')
         for image in images:
             img_url = image['src']
+            img_url = url + img_url
 
-        book = Book(url_book, upc, title, p_inc, p_excl, "3", "ets", cat, review, img_url)
+
+        # Création objet Book
+        book = Book(url_book, upc, title, p_inc, p_excl, stock, desc, cat, review, img_url)
+
+        # Ajouter objet Book à une liste
         book_info.append(book)
 
 
 def read_table(sp):
+    list_th = []
     list_th.clear()
     all_th = sp.findAll('td')
 
@@ -193,10 +202,12 @@ def read_table(sp):
         th_data = i.text.rstrip('\n')
         list_th.append(th_data)
 
+    #retirer informations inutiles
     del list_th[1]
-    del list_th[3:6]
+    del list_th[3:4]
+    del list_th[-1]
 
-    # retourner liste avec UPC et les deux prix
+    # retourner liste avec UPC, les deux prix et stock
     return list_th
 
 
