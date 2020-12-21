@@ -1,5 +1,12 @@
+import os
+import urllib
+
 import requests
 from bs4 import BeautifulSoup
+
+#Creation des dossiers
+if not os.path.isdir("./CSV"):
+    os.mkdir("./CSV")
 
 # Debut
 url = 'http://books.toscrape.com/'
@@ -14,7 +21,6 @@ list_cat = []
 book_info = []
 links_other_page = []
 links_all_page = []
-
 
 
 # classe Book
@@ -36,6 +42,9 @@ class Book:
         return [self.product_page_url, self.upc, self.title, str(self.price_incl), str(self.price_excl),
                 str(self.number_available), self.product_description, self.category, self.review_rating, self.image_url]
 
+    def return_url_title(self):
+        return [self.title, self.image_url]
+
 
 # Recuperer toutes les catégories
 def get_categories():
@@ -53,43 +62,60 @@ def get_categories():
         list_cat.append(categorie)
 
 
-def get_number_page():
+def get_number_page(url_cat):
     num = 0
     ind = 1
 
-    for i in list_cat:
-        url1 = links_cat[num]
 
-        num += 1
-        ind += 1
-        res = requests.get(url1)
-        sp = BeautifulSoup(res.text, features="html.parser")
-        page = sp.find(class_='current')
-        if page:
-            nbre_page = page.text.replace(" ", "")
-            max_page = nbre_page[-3]
-            for j in range(int(max_page) - 1):
-                url2 = 'http://books.toscrape.com/catalogue/category/books/' + i.replace(" ", "").lower().strip(
-                    '\n') + "_" + str(ind) + "/page-" + str(j + 2) + ".html"
-                links_other_page.append(url2)
+    #url1 = links_cat[num]
+    links_other_page.clear()
+    num += 1
+    ind += 1
+    max_page = ""
+    res = requests.get(url_cat)
+    sp = BeautifulSoup(res.text, features="html.parser")
+    page = sp.find(class_='current')
+    if page:
+        nbre_page = page.text.replace(" ", "")
+        max_page = nbre_page[-3]
 
+
+    return max_page
 
 def get_all_book_by_categorie():
     num = 0
     max = 1
+    ind = 2
 
     for i in list_cat:
         links_all_page.clear()
         book_info.clear()
         url1 = links_cat[num]
         links_all_page.append(url1)
+        print(url1)
+        max_page = get_number_page(url1)
+        categorie = url1.split('/')[-2]
+        if ind >= 10:
+            categorie = categorie[:-3]
+        else:
+            categorie = categorie[:-2]
 
-        matching = filter(lambda x: i.lower() in x, links_other_page)
 
-        for k in matching:
-            links_all_page.append(k)
+        if max_page != "":
 
-        num += 1
+            for j in range(int(max_page) - 1):
+
+                url2 = 'http://books.toscrape.com/catalogue/category/books/' + categorie.lower() + "_" + str(ind) \
+                       + "/page-" + str(j + 2) + ".html"
+                print(url2)
+                links_all_page.append(url2)
+
+        #matching = filter(lambda x: i.lower() in x, links_other_page)
+
+        #for k in matching:
+            #links_all_page.append(k)
+
+
 
         for link in links_all_page:
             res = requests.get(link)
@@ -110,26 +136,32 @@ def get_all_book_by_categorie():
 
                 get_book_info(link_final, i)
 
+        # Téléchargement Image
+        download_save_image()
         extract_to_csv(i + ".csv")
 
+        ind += 1
+        num += 1
 
 def extract_to_csv(output_file, delimiter="\t"):
 
-    with open(output_file, "w", encoding='utf-8') as output_file:
+    with open("./CSV/" + output_file, "w", encoding='utf-8') as output_file:
         # for i in header:
         # output_file.write(i + '\t')
+
         cc = 0
         header = ["product_page_url", "universal_product_code(upc)", "title", "price_including_tax",
-                  "price_excluding_tax","number_available", "product_description", "category", "review_rating",
+                  "price_excluding_tax", "number_available", "product_description", "category", "review_rating",
                   "image_url"]
         for head in header:
-            output_file.write(head+"*" + '\t')
+            output_file.write(head + "*" + '\t')
 
         output_file.write('\n')
 
         for li in book_info:
             book = li.val()
             for info in book:
+
                 output_file.write(info + "*" + '\t')
                 cc += 1
                 if cc == 10:
@@ -140,9 +172,10 @@ def extract_to_csv(output_file, delimiter="\t"):
 def get_book_info(url_book, cat):
     if response:
         res = requests.get(url_book)
-        sp = BeautifulSoup(res.text, features="html.parser")
+        sp = BeautifulSoup(res.content, features="html.parser")
 
         table = read_table(sp)
+        # Traiter information du tableau
         upc = table[0]
         p_inc = table[1]
         p_inc = p_inc[1:].replace("Â", "")
@@ -150,20 +183,25 @@ def get_book_info(url_book, cat):
         p_excl = p_excl[1:]
         stock = table[3]
 
-        #récuper le nombre
+        # Récuper le stock
         stock = stock.split(" ")
         stock = stock[2].replace("(", "")
 
-        # Ajouter description à la lsite
+        # Ajouter description
         desc = sp.find_all('p')
-        desc = desc[3].text
+        if desc:
+            desc = ""
+        else:
+            desc = desc[3].text
 
-        # Ajouter titre à la liste
+
+
+
+        # Ajouter titre
         title = sp.find('h1')
         title = title.text
 
-
-        # Ajouter note à la liste
+        # Ajouter note
         note = sp.find_all('p')
         note_str = note[2].get_attribute_list('class')
         note_end = note_str[1]
@@ -180,10 +218,11 @@ def get_book_info(url_book, cat):
             review = "5/5"
 
         # Ajouter Image URL
-        images = soup.findAll('img')
-        for image in images:
-            img_url = image['src']
-            img_url = url + img_url
+        image = sp.find(class_='item active')
+        image = image.find('img')
+
+        img_url = image['src']
+        img_url = url + img_url[6:]
 
 
         # Création objet Book
@@ -202,7 +241,7 @@ def read_table(sp):
         th_data = i.text.rstrip('\n')
         list_th.append(th_data)
 
-    #retirer informations inutiles
+    # retirer informations inutiles
     del list_th[1]
     del list_th[3:4]
     del list_th[-1]
@@ -211,9 +250,34 @@ def read_table(sp):
     return list_th
 
 
+def download_save_image():
+    for li in book_info:
+        book = li.return_url_title()
+        #print(book)
 
+        ext = book[1].split('/')[-1].split(".")
+        ext = ext[1]
+        url_img = book[1]
+        name = str(book[0]).replace(" ", "_")
+        list_error = [":", "/", "\ ", "*", "|", "?", '"', "<", ">"]
+        for error in list_error:
+            if error in name:
+                #print("error")
+                if ":" in name:
+                    name = name.replace(":", "")
+                if '"' in name:
+                    name = name.replace('"', "")
+                if "*" in name:
+                    name = name.replace("*", "")
+                if "?" in name:
+                    name = name.replace("?", "")
+                if "/" in name:
+                    name = name.replace("/", "-")
+
+        #print(name)
+        urllib.request.urlretrieve(url_img, "Images/" + name + "." + ext)
 
 
 get_categories()
-get_number_page()
+
 get_all_book_by_categorie()
