@@ -101,7 +101,7 @@ def get_all_book_by_categorie():
 
                 links_all_page.append(url2)
 
-        print(i)
+
 
         for link in links_all_page:
             res = requests.get(link)
