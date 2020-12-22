@@ -136,7 +136,7 @@ def extract_to_csv(output_file, delimiter="\t"):
                   "price_excluding_tax", "number_available", "product_description", "category", "review_rating",
                   "image_url"]
         for head in header:
-            output_file.write(head + "*" + '\t')
+            output_file.write(head + "@" + '\t')
 
         output_file.write('\n')
 
@@ -144,7 +144,7 @@ def extract_to_csv(output_file, delimiter="\t"):
             book = li.val()
             for info in book:
 
-                output_file.write(info + "*" + '\t')
+                output_file.write(info + "@" + '\t')
                 cc += 1
                 if cc == 10:
                     output_file.write('\n')
