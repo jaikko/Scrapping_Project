@@ -147,7 +147,8 @@ def extract_to_csv(output_file, delimiter="\t"):
                 output_file.write(info + "|" + '\t')
                 cc += 1
                 if cc == 10:
-                    output_file.write('\n')                    cc = 0
+                    output_file.write('\n')
+                    cc = 0
 
 
 def get_book_info(url_book, cat):
