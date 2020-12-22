@@ -19,11 +19,12 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc8ff22c-7340-4695-a32d-e5ee002ea747" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+    <list default="true" id="fc8ff22c-7340-4695-a32d-e5ee002ea747" name="Default Changelist" comment="&quot;fin&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/mainV2.py" beforeDir="false" afterPath="$PROJECT_DIR$/mainV2.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/trtrt.py" beforeDir="false" afterPath="$PROJECT_DIR$/trtrt.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/script.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/trtrt.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,6 +153,14 @@
       <option name="presentableId" value="Default" />
       <updated>1608025390425</updated>
     </task>
+    <task id="LOCAL-00001" summary="&quot;fin&quot;">
+      <created>1608572910407</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1608572910407</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -164,36 +173,41 @@
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="&quot;fin&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;fin&quot;" />
   </component>
   <component name="WindowStateProjectService">
     <state x="533" y="214" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1608217753962">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="533" y="214" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1536.824@0.0.1536.824" timestamp="1608217753962" />
-    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1608572799050">
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog" timestamp="1608626745799">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1608572799050" />
+    <state x="499" y="159" key="#com.intellij.refactoring.safeDelete.UnsafeUsagesDialog/0.0.1536.824@0.0.1536.824" timestamp="1608626745799" />
     <state width="423" height="466" key="DebuggerActiveHint" timestamp="1608222670278">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="423" height="466" key="DebuggerActiveHint/0.0.1536.824@0.0.1536.824" timestamp="1608222670278" />
-    <state width="1515" height="260" key="GridCell.Tab.0.bottom" timestamp="1608572819889">
+    <state width="1515" height="281" key="GridCell.Tab.0.bottom" timestamp="1608635257702">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="260" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1608572819889" />
-    <state width="1515" height="260" key="GridCell.Tab.0.center" timestamp="1608572819888">
+    <state width="1515" height="281" key="GridCell.Tab.0.bottom/0.0.1536.824@0.0.1536.824" timestamp="1608635257702" />
+    <state width="1515" height="281" key="GridCell.Tab.0.center" timestamp="1608635257702">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="260" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1608572819888" />
-    <state width="1515" height="260" key="GridCell.Tab.0.left" timestamp="1608572819888">
+    <state width="1515" height="281" key="GridCell.Tab.0.center/0.0.1536.824@0.0.1536.824" timestamp="1608635257702" />
+    <state width="1515" height="281" key="GridCell.Tab.0.left" timestamp="1608635257702">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="260" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1608572819888" />
-    <state width="1515" height="260" key="GridCell.Tab.0.right" timestamp="1608572819888">
+    <state width="1515" height="281" key="GridCell.Tab.0.left/0.0.1536.824@0.0.1536.824" timestamp="1608635257702" />
+    <state width="1515" height="281" key="GridCell.Tab.0.right" timestamp="1608635257702">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state width="1515" height="260" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1608572819888" />
+    <state width="1515" height="281" key="GridCell.Tab.0.right/0.0.1536.824@0.0.1536.824" timestamp="1608635257702" />
     <state width="1515" height="260" key="GridCell.Tab.1.bottom" timestamp="1608572819889">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -210,33 +224,17 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1515" height="260" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1608572819889" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1608572979937">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1608572979937" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
       <breakpoints>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/script.py</url>
-          <line>81</line>
-          <option name="timeStamp" value="28" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/script.py</url>
-          <line>79</line>
-          <option name="timeStamp" value="29" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/trtrt.py</url>
-          <line>54</line>
-          <option name="timeStamp" value="109" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/mainV2.py</url>
-          <line>139</line>
-          <option name="timeStamp" value="120" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/mainV2.py</url>
-          <line>64</line>
+          <line>66</line>
           <option name="timeStamp" value="127" />
         </line-breakpoint>
       </breakpoints>

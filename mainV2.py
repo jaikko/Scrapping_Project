@@ -4,9 +4,12 @@ import urllib
 import requests
 from bs4 import BeautifulSoup
 
-#Creation des dossiers
+# Creation des dossiers
 if not os.path.isdir("./CSV"):
     os.mkdir("./CSV")
+
+if not os.path.isdir("./Images"):
+    os.mkdir("./Images")
 
 # Debut
 url = 'http://books.toscrape.com/'
@@ -19,7 +22,6 @@ links_cat = []
 links_books = []
 list_cat = []
 book_info = []
-links_other_page = []
 links_all_page = []
 
 
@@ -63,14 +65,6 @@ def get_categories():
 
 
 def get_number_page(url_cat):
-    num = 0
-    ind = 1
-
-
-    #url1 = links_cat[num]
-    links_other_page.clear()
-    num += 1
-    ind += 1
     max_page = ""
     res = requests.get(url_cat)
     sp = BeautifulSoup(res.text, features="html.parser")
@@ -79,12 +73,11 @@ def get_number_page(url_cat):
         nbre_page = page.text.replace(" ", "")
         max_page = nbre_page[-3]
 
-
     return max_page
+
 
 def get_all_book_by_categorie():
     num = 0
-    max = 1
     ind = 2
 
     for i in list_cat:
@@ -92,7 +85,7 @@ def get_all_book_by_categorie():
         book_info.clear()
         url1 = links_cat[num]
         links_all_page.append(url1)
-        print(url1)
+
         max_page = get_number_page(url1)
         categorie = url1.split('/')[-2]
         if ind >= 10:
@@ -100,29 +93,19 @@ def get_all_book_by_categorie():
         else:
             categorie = categorie[:-2]
 
-
         if max_page != "":
 
             for j in range(int(max_page) - 1):
-
                 url2 = 'http://books.toscrape.com/catalogue/category/books/' + categorie.lower() + "_" + str(ind) \
                        + "/page-" + str(j + 2) + ".html"
-                print(url2)
+
                 links_all_page.append(url2)
 
-        #matching = filter(lambda x: i.lower() in x, links_other_page)
-
-        #for k in matching:
-            #links_all_page.append(k)
-
-
+        print(i)
 
         for link in links_all_page:
             res = requests.get(link)
             sp = BeautifulSoup(res.text, features="html.parser")
-            # page = sp.find(class_='current')
-            # result = sp.find(class_='form-horizontal')
-
             books = sp.findAll(class_="image_container")
 
             # Création url du livre
@@ -138,16 +121,15 @@ def get_all_book_by_categorie():
 
         # Téléchargement Image
         download_save_image()
+        # Extraction vers csv
         extract_to_csv(i + ".csv")
 
         ind += 1
         num += 1
 
-def extract_to_csv(output_file, delimiter="\t"):
 
+def extract_to_csv(output_file, delimiter="\t"):
     with open("./CSV/" + output_file, "w", encoding='utf-8') as output_file:
-        # for i in header:
-        # output_file.write(i + '\t')
 
         cc = 0
         header = ["product_page_url", "universal_product_code(upc)", "title", "price_including_tax",
@@ -170,6 +152,7 @@ def extract_to_csv(output_file, delimiter="\t"):
 
 
 def get_book_info(url_book, cat):
+
     if response:
         res = requests.get(url_book)
         sp = BeautifulSoup(res.content, features="html.parser")
@@ -185,48 +168,65 @@ def get_book_info(url_book, cat):
 
         # Récuper le stock
         stock = stock.split(" ")
-        stock = stock[2].replace("(", "")
+        if not stock:
+            stock = ""
+        else:
+            stock = stock[2].replace("(", "")
 
         # Ajouter description
-        desc = sp.find_all('p')
-        if desc:
-            desc = ""
+        description = sp.find("div", {"id": "product_description"})
+        if description:
+            desc = sp.find_all('p')[3]
+            desc = desc.text
         else:
-            desc = desc[3].text
-
+            desc = ""
 
 
 
         # Ajouter titre
         title = sp.find('h1')
-        title = title.text
+        if not title:
+            title = ""
+        else:
+            title = title.text
 
         # Ajouter note
-        note = sp.find_all('p')
-        note_str = note[2].get_attribute_list('class')
-        note_end = note_str[1]
 
-        if note_end == "One":
+        note = sp.find_all('p')
+        note = note[2].get_attribute_list('class')
+
+        if not note:
+            note = ""
+        else:
+            note = note[1]
+        review = ""
+
+        if note == "One":
             review = "1/5"
-        elif note_end == "Two":
+        elif note == "Two":
             review = "2/5"
-        elif note_end == "Three":
+        elif note == "Three":
             review = "3/5"
-        elif note_end == "Four":
+        elif note == "Four":
             review = "4/5"
-        elif note_end == "Five":
+        elif note == "Five":
             review = "5/5"
 
         # Ajouter Image URL
+
         image = sp.find(class_='item active')
         image = image.find('img')
 
-        img_url = image['src']
-        img_url = url + img_url[6:]
+        if not image:
 
+            img = ""
+        else:
+
+            img = image['src']
+            img = url + img[6:]
 
         # Création objet Book
-        book = Book(url_book, upc, title, p_inc, p_excl, stock, desc, cat, review, img_url)
+        book = Book(url_book, upc, title, p_inc, p_excl, stock, desc, cat, review, img)
 
         # Ajouter objet Book à une liste
         book_info.append(book)
@@ -253,31 +253,21 @@ def read_table(sp):
 def download_save_image():
     for li in book_info:
         book = li.return_url_title()
-        #print(book)
-
         ext = book[1].split('/')[-1].split(".")
         ext = ext[1]
         url_img = book[1]
-        name = str(book[0]).replace(" ", "_")
-        list_error = [":", "/", "\ ", "*", "|", "?", '"', "<", ">"]
+        name = str(book[0])
+        list_error = [":", "/", "\\", "*", "|", "?", '"', "<", ">"]
         for error in list_error:
             if error in name:
-                #print("error")
-                if ":" in name:
-                    name = name.replace(":", "")
-                if '"' in name:
-                    name = name.replace('"', "")
-                if "*" in name:
-                    name = name.replace("*", "")
-                if "?" in name:
-                    name = name.replace("?", "")
-                if "/" in name:
-                    name = name.replace("/", "-")
+                name = name.replace(error, "")
 
-        #print(name)
         urllib.request.urlretrieve(url_img, "Images/" + name + "." + ext)
 
 
-get_categories()
+if response:
+    get_categories()
 
-get_all_book_by_categorie()
+    get_all_book_by_categorie()
+else:
+    print('site introuvable')
