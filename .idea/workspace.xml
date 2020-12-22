@@ -1,25 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="BranchesTreeState">
-    <expand>
+    <expand />
+    <select>
       <path>
         <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
         <item name="LOCAL_ROOT" type="e8cecc67:BranchNodeDescriptor" />
       </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-      <path>
-        <item name="ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="REMOTE_ROOT" type="e8cecc67:BranchNodeDescriptor" />
-        <item name="GROUP_NODE:origin" type="e8cecc67:BranchNodeDescriptor" />
-      </path>
-    </expand>
-    <select />
+    </select>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="fc8ff22c-7340-4695-a32d-e5ee002ea747" name="Default Changelist" comment="&quot;fin plus&quot;">
+    <list default="true" id="fc8ff22c-7340-4695-a32d-e5ee002ea747" name="Default Changelist" comment="&quot;terminé&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,6 +27,13 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="hiddenUrls">
+      <set>
+        <option value="https://github.com/jaikko/Scrapping" />
+      </set>
+    </option>
   </component>
   <component name="ProjectId" id="1lgiydOCs1CrryspMRw5Hbrmt2P" />
   <component name="ProjectViewState">
@@ -168,11 +166,27 @@
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
       <map>
+        <entry key="1">
+          <value>
+            <State>
+              <option name="CUSTOM_BOOLEAN_PROPERTIES">
+                <map>
+                  <entry key="Show.Git.Branches" value="true" />
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
         <entry key="MAIN">
           <value>
             <State />
           </value>
         </entry>
+      </map>
+    </option>
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="1" value="TOOL_WINDOW" />
       </map>
     </option>
     <option name="oldMeFiltersMigrated" value="true" />
@@ -227,6 +241,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state width="1515" height="260" key="GridCell.Tab.1.right/0.0.1536.824@0.0.1536.824" timestamp="1608572819889" />
+    <state x="510" y="133" key="RollbackChangesDialog" timestamp="1608646642808">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="510" y="133" key="RollbackChangesDialog/0.0.1536.824@0.0.1536.824" timestamp="1608646642808" />
     <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1608635484163">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
@@ -235,6 +253,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1536.824@0.0.1536.824" timestamp="1608646027881" />
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup" timestamp="1608646703338">
+      <screen x="0" y="0" width="1536" height="824" />
+    </state>
+    <state x="431" y="145" width="672" height="678" key="search.everywhere.popup/0.0.1536.824@0.0.1536.824" timestamp="1608646703338" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
