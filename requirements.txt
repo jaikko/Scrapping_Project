@@ -5,3 +5,8 @@ virtualenv==20.1.0
 chardet==3.0.4
 idna==2.10
 certifi==2020.12.5
+soupsieve==2.1
+distlib==0.3.1
+filelock==3.0.12
+six==1.15.0
+appdirs==1.4.4
