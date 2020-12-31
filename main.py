@@ -85,14 +85,16 @@ def get_all_book_by_categorie():
         book_info.clear()
         url1 = links_cat[num]
         links_all_page.append(url1)
-
-        max_page = get_number_page(url1)
+        
         categorie = url1.split('/')[-2]
         if ind >= 10:
             categorie = categorie[:-3]
         else:
             categorie = categorie[:-2]
 
+
+        max_page = get_number_page(url1)
+       
         if max_page != "":
 
             for j in range(int(max_page) - 1):
