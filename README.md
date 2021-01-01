@@ -5,7 +5,7 @@ Pour réaliser ses manipulations, il est nécessaire d'installer python et gitba
 Avant, il faut télécharger le projet:
 
 1. ouvrir gitbash
-2. dans le dossier de votre choix, exécuter git clone "lienduprojet"
+2. dans le dossier de votre choix, exécuter git clone https://github.com/jaikko/Scrapping_Project.git
 
 Pour créer et activer l'environnement virtuel:
 
